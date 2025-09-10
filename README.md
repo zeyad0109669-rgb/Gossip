@@ -1,10 +1,11 @@
-
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <title>GOSSIP - Menu</title>
 <link rel="preconnect" href="https://fonts.gstatic.com">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <style>
   :root{
     --bg:#0f0f11;
@@ -23,16 +24,32 @@
     -moz-osx-font-smoothing:grayscale;
     line-height:1.45;
   }
-  header{
-    padding:40px 20px;
-    text-align:center;
-    border-bottom:1px solid rgba(200,169,81,0.12);
-    background: linear-gradient(90deg, rgba(0,0,0,0.35), rgba(0,0,0,0.15));
-    position: sticky;
-    top:0;
-    z-index:10;
-    backdrop-filter: blur(6px);
-  }
+  
+
+header {
+  padding:40px 20px;
+  text-align:center;
+  border-bottom:1px solid rgba(200,169,81,0.12);
+  background: rgba(0,0,0,0.6);
+  position: fixed;
+  top:0;
+  left:0;
+  right:0;
+  z-index:100;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+header.hidden {
+  transform: translateY(-100%);
+  opacity: 0;
+  pointer-events: none;
+}
+
+header.hidden {
+  transform: translateY(-100%);
+  opacity: 0;
+  pointer-events: none;
+}
+
   .brand{
     display:inline-block;
     padding:8px 18px;
@@ -41,7 +58,7 @@
   }
   h1{ margin:0; font-size:36px; letter-spacing:2px; color:var(--accent); }
   p.lead{ margin:6px 0 0; color:var(--muted); font-size:14px; letter-spacing:3px; }
-  main{ max-width:1100px; margin:30px auto; padding:0 18px 60px; }
+  main{ max-width:1100px; margin:30px auto; padding:160px 18px 60px; }
   .grid{
     display:grid;
     grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
@@ -78,6 +95,217 @@
   .muted{ color:var(--muted); font-weight:500; font-size:13px; }
   footer{ margin-top:30px; padding:28px 18px; color:var(--muted); text-align:center; border-top:1px solid rgba(200,169,81,0.06); }
   .badge{ display:inline-block; padding:6px 10px; border-radius:999px; background:var(--glass); color:var(--muted); border:1px solid rgba(255,255,255,0.02); margin-top:6px; }
+  
+  .quick-icons {
+    margin-top: 15px;
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  .quick-icons a {
+    background: var(--glass);
+    border: 1px solid rgba(255,255,255,0.08);
+    padding: 10px 14px;
+    border-radius: 10px;
+    color: var(--accent);
+    font-weight: 600;
+    text-decoration: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 70px;
+    transition: transform 0.2s ease, background 0.2s ease;
+  }
+  .quick-icons a i {
+    font-size: 22px;
+    margin-bottom: 6px;
+  }
+  .quick-icons a span {
+    font-size: 12px;
+  }
+  .quick-icons a:hover {
+    transform: translateY(-5px);
+    background: rgba(200,169,81,0.1);
+  }
+
+  
+  .side-icons {
+    position: fixed;
+    top: 50%;
+    right: 20px;
+    transform: translateY(-50%);
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    z-index: 200;
+  }
+  .side-icons a {
+    background: var(--glass);
+    border: 1px solid rgba(255,255,255,0.08);
+    padding: 8px;
+    border-radius: 50%;
+    color: var(--accent);
+    font-size: 18px;
+    text-align: center;
+    transition: transform 0.2s ease, background 0.2s ease;
+  }
+  .side-icons a:hover {
+    transform: scale(1.2);
+    background: rgba(200,169,81,0.1);
+  }
+
+  
+  .bottom-icons {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    z-index: 200;
+  }
+  .bottom-icons a {
+    background: var(--glass);
+    border: 1px solid rgba(255,255,255,0.08);
+    padding: 8px 14px;
+    border-radius: 20px;
+    color: var(--accent);
+    font-size: 14px;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: transform 0.2s ease, background 0.2s ease;
+  }
+  .bottom-icons a i {
+    font-size: 18px;
+  }
+  .bottom-icons a:hover {
+    transform: translateX(-5px);
+    background: rgba(200,169,81,0.1);
+  }
+
+  
+  .bottom-icons.hidden {
+    transform: translateY(150%);
+    opacity: 0;
+    pointer-events: none;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+  }
+
+  
+  .top-icons {
+    position: fixed;
+    top: 100px;
+    right: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    z-index: 200;
+  }
+  .top-icons a {
+    background: var(--glass);
+    border: 1px solid rgba(255,255,255,0.08);
+    padding: 8px 14px;
+    border-radius: 20px;
+    color: var(--accent);
+    font-size: 14px;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: transform 0.2s ease, background 0.2s ease;
+  }
+  .top-icons a i {
+    font-size: 18px;
+  }
+  .top-icons a:hover {
+    transform: translateX(-5px);
+    background: rgba(200,169,81,0.1);
+  }
+
+  
+  header.hidden .lead {
+    opacity: 0;
+    transform: translateY(-20px);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+  }
+
+  
+  
+  .bottom-bar {
+    margin: 20px 0;
+    padding: 12px 20px;
+    background: rgba(0,0,0,0.4);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 12px;
+    display: flex;
+    justify-content: center;
+    gap: 24px;
+  }
+  .bottom-bar a {
+    color: var(--accent);
+    text-decoration: none;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 14px;
+    transition: color 0.2s ease;
+  }
+  .bottom-bar a i {
+    font-size: 18px;
+  }
+  .bottom-bar a:hover {
+    color: #fff;
+  }
+
+
+  
+  .brand {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+  }
+  .brand img.logo {
+    height: 60px;
+    width: auto;
+  }
+
+  
+  .bottom-bar {
+    margin: 20px 0;
+    padding: 12px 10px;
+    background: rgba(0,0,0,0.4);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 12px;
+    display: flex;
+    gap: 18px;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+  .bottom-bar::-webkit-scrollbar {
+    display: none;
+  }
+  .bottom-bar a {
+    color: var(--accent);
+    text-decoration: none;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 14px;
+    transition: color 0.2s ease;
+    padding: 6px 10px;
+    border-radius: 8px;
+  }
+  .bottom-bar a:hover {
+    color: #fff;
+    background: rgba(200,169,81,0.1);
+  }
+
   /* animations */
   @keyframes pop{ from{ transform: translateY(-10px) scale(.98); opacity:0 } to{ transform:none; opacity:1 } }
   .fade-in{ animation: fadeIn .6s ease both; }
@@ -88,7 +316,9 @@
     .grid{ grid-template-columns: 1fr; }
   }
   /* sticky quick-nav */
-  .quick{
+  
+
+
     position: fixed; right:18px; bottom:18px; z-index:30; display:flex; flex-direction:column; gap:10px;
   }
   .quick a{ background:var(--accent); color:#111; padding:10px 12px; border-radius:8px; text-decoration:none; font-weight:700; box-shadow:0 6px 18px rgba(200,169,81,0.22); }
@@ -98,14 +328,58 @@
 </style>
 </head>
 <body>
-<header>
-  <div class="brand">
-    <h1>GOSSIP</h1>
-    <p class="lead">LIVE · LAUGH · GOSSIP</p>
-  </div>
-</header>
+
+
+
+
+
+
+<div style="text-align:center; padding:0; margin-top:20px;">
+  <h1 style="color:#c8a951; font-size:48px; margin:20px 0 5px; text-align:center;">GOSSIP</h1>
+  <p style="color:#bfb8a8; font-size:16px; margin:0; letter-spacing:3px;">LIVE · LAUGH · GOSSIP</p>
+</div>
+
+
+
+
+
+
+
+
+
 
 <main>
+
+  
+  <nav class="bottom-bar">
+    <a href="#hot-drinks">☕ Hot Drinks</a>
+    <a href="#iced-drinks">🧊 Iced Drinks</a>
+    <a href="#sparkling">✨ Sparkling</a>
+    <a href="#cocktails">🍹 Cocktails</a>
+    <a href="#fresh-juice">🍊 Fresh Juice</a>
+    <a href="#smoothies">🥭 Smoothies</a>
+    <a href="#milkshake">🥤 Milk Shake</a>
+    <a href="#soft-drinks">🥤 Soft Drinks</a>
+    <a href="#breakfast">🍳 Breakfast</a>
+    <a href="#appetizers">🥟 Appetizers</a>
+    <a href="#soups">🍲 Soups</a>
+    <a href="#salads">🥗 Salads</a>
+    <a href="#main-chicken">🍗 Chicken</a>
+    <a href="#meat">🥩 Meat</a>
+    <a href="#seafood">🦐 Seafood</a>
+    <a href="#fajitas">🌯 Fajitas</a>
+    <a href="#pasta">🍝 Pasta</a>
+    <a href="#pizza">🍕 Pizza</a>
+    <a href="#burgers">🍔 Burgers</a>
+    <a href="#sandwiches">🥪 Sandwiches</a>
+    <a href="#dessert">🍰 Dessert</a>
+    <a href="#extras">➕ Extras</a>
+  </nav>
+
+
+
+  
+
   <div style="display:flex;gap:18px;flex-direction:column;">
     <div class="grid">
       <section class="section fade-in" id="hot-drinks">
@@ -206,11 +480,11 @@
       <section class="section fade-in" id="soft-drinks">
         <h2>Soft Drinks <button class="toggle" onclick="toggleCollapse(this)">Toggle</button></h2>
         <ul class="list">
-          <li class="item"><div class="name">Water Small</div><div class="price">25</div></li>
-          <li class="item"><div class="name">Water Large</div><div class="price">50</div></li>
-          <li class="item"><div class="name">Cola / Sprite / Fanta</div><div class="price">55</div></li>
-          <li class="item"><div class="name">Fayrouz / Birell / Schweppes</div><div class="price">65</div></li>
-          <li class="item"><div class="name">Red Bull</div><div class="price">130</div></li>
+          <li class="item"><div class="name">Water Small</div><div class="price">-</div></li>
+          <li class="item"><div class="name">Water Large</div><div class="price">-</div></li>
+          <li class="item"><div class="name">Cola / Sprite / Fanta</div><div class="price">-</div></li>
+          <li class="item"><div class="name">Fayrouz / Birell / Schweppes</div><div class="price">-</div></li>
+          <li class="item"><div class="name">Red Bull</div><div class="price">-</div></li>
         </ul>
       </section>
 
@@ -232,8 +506,8 @@
           <li class="item"><div class="name">Chicken Wings (6 Pieces)</div><div class="price">135</div></li>
           <li class="item"><div class="name">Fried Shrimps</div><div class="price">190</div></li>
           <li class="item"><div class="name">Shrimp Cocktail</div><div class="price">200</div></li>
-          <li class="item"><div class="name">Calamari</div><div class="price">170</div></li>
-          <li class="item"><div class="name">Oriental Sausages</div><div class="price">150</div></li>
+          <li class="item"><div class="name">Calamari</div><div class="price">-</div></li>
+          <li class="item"><div class="name">Oriental Sausages</div><div class="price">-</div></li>
           <li class="item"><div class="name">White Cheese & Tomatoes</div><div class="price">80</div></li>
           <li class="item"><div class="name">Carrots & Cucumber Slices</div><div class="price">50</div></li>
           <li class="item"><div class="name">Tehina</div><div class="price">60</div></li>
@@ -278,7 +552,7 @@
           <li class="item"><div class="name">Grilled Chicken with Mushroom Sauce</div><div class="price">350</div></li>
           <li class="item"><div class="name">Chicken Cordon Bleu</div><div class="price">310</div></li>
           <li class="item"><div class="name">Chicken Cacciatore</div><div class="price">360</div></li>
-          <li class="item"><div class="name">Chicken Gossip</div><div class="price">360</div></li>
+          <li class="item"><div class="name">Chicken Gossip</div><div class="price">-</div></li>
         </ul>
       </section>
     </div> <!-- grid fourth row -->
@@ -400,12 +674,10 @@
 
   </div>
 
-  <!-- quick navigation -->
-  <div class="quick" aria-hidden>
-    <a href="#hot-drinks">Drinks</a>
-    <a href="#pasta">Pasta</a>
-    <a href="#pizza">Pizza</a>
-  </div>
+  
+
+  
+
 </main>
 
 <footer>
@@ -416,6 +688,37 @@
 </footer>
 
 <script>
+  
+
+// hide header on scroll (with hidden class)
+let lastScroll = 0;
+const header = document.querySelector('header');
+window.addEventListener('scroll', () => {
+  const currentScroll = window.pageYOffset;
+  if (currentScroll > lastScroll && currentScroll > 50) {
+    header.classList.add('hidden');
+  } else {
+    header.classList.remove('hidden');
+  }
+  lastScroll = currentScroll;
+});
+
+  
+
+
+// hide header on scroll (with hidden class)
+let lastScroll = 0;
+const header = document.querySelector('header');
+window.addEventListener('scroll', () => {
+  const currentScroll = window.pageYOffset;
+  if (currentScroll > lastScroll && currentScroll > 50) {
+    header.classList.add('hidden');
+  } else {
+    header.classList.remove('hidden');
+  }
+  lastScroll = currentScroll;
+});
+
   // simple collapse toggle for sections
   function toggleCollapse(btn){
     const section = btn.closest('.section');
@@ -442,6 +745,15 @@
     });
   });
 </script>
+
+
+
+
+
+
+
+
+
 
 </body>
 </html>
