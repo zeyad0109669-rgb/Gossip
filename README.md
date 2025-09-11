@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+
 <html lang="en">
 <head>
 <meta charset="utf-8" />
@@ -237,26 +237,32 @@ header.hidden {
   
 
 
-
 .bottom-bar {
   position: sticky;
   top: 80px;
   z-index: 150;
-  background: #000;
+  background: #000; /* خلفية سوداء 100% */
   padding: 12px 10px;
-  border-bottom: 2px solid #c8a951;
+  border-bottom: 2px solid #c8a951; /* خط ذهبي */
+  border-radius: 0;
   display: flex;
   gap: 18px;
   overflow-x: auto;
   white-space: nowrap;
-  transition: transform 0.4s ease, opacity 0.4s ease;
 }
 
-.bottom-bar.hidden {
-  transform: translateY(-120%);
-  opacity: 0;
-}
 
+
+  .bottom-bar a {
+    color: var(--accent);
+    text-decoration: none;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 14px;
+    transition: color 0.2s ease;
+  }
   .bottom-bar a i {
     font-size: 18px;
   }
@@ -405,85 +411,8 @@ ul.list.scrollable::before {
 
 
 .menu-section h2 {
-  scroll-margin-top: 80px; /* مسافة بين العنوان وقائمة الاختصارات */
+  scroll-margin-top: 60px; /* مسافة بين العنوان وقائمة الاختصارات */
 }
-
-
-html {
-  scroll-behavior: smooth;
-}
-
-
-/* الوضع الجانبي للاختصارات */
-.bottom-bar.side-mode {
-  position: fixed !important;
-  top: 120px;
-  right: 20px;
-  left: auto;
-  flex-direction: column;
-  align-items: flex-start;
-  width: 200px;
-  max-height: 80vh;
-  overflow-y: auto;
-  padding: 16px;
-  border: 1px solid #c8a951;
-  border-radius: 12px;
-  box-shadow: 0 6px 16px rgba(0,0,0,0.5);
-}
-.bottom-bar.side-mode a {
-  display: block;
-  padding: 8px 6px;
-  width: 100%;
-}
-
-
-/* الوضع العادي */
-.bottom-bar {
-  position: sticky;
-  top: 80px;
-  z-index: 150;
-  background: #000;
-  padding: 12px 10px;
-  border-bottom: 2px solid #c8a951;
-  display: flex;
-  flex-direction: row; /* أفقي */
-  gap: 18px;
-  overflow-x: auto;
-  white-space: nowrap;
-  transition: all 0.3s ease;
-}
-
-/* الوضع الجانبي */
-.bottom-bar.side-mode {
-  position: fixed !important;
-  top: 120px;
-  right: 0;
-  left: auto;
-  flex-direction: column; /* عمودي */
-  align-items: flex-start;
-  width: 200px;
-  max-height: 80vh;
-  overflow-y: auto;
-  padding: 16px;
-  border: 1px solid #c8a951;
-  border-radius: 12px 0 0 12px;
-  box-shadow: -4px 0 10px rgba(0,0,0,0.6);
-  animation: slideIn 0.4s forwards;
-}
-
-/* الانيميشن */
-@keyframes slideIn {
-  from { transform: translateX(100%); opacity: 0; }
-  to { transform: translateX(0); opacity: 1; }
-}
-
-
-/* highlight section when its list has more content or is being scrolled */
-.section.has-more {
-  border: 1px solid #c8a951 !important;
-  box-shadow: 0 10px 30px rgba(200,169,81,0.12);
-}
-.section.has-more h2 { color: #c8a951; }
 
 </style>
 </head>
@@ -958,68 +887,6 @@ window.addEventListener('scroll', () => {
     bottomBar.classList.remove('side-mode');
   }
 });
-
-</script>
-<script>
-
-// تحويل القائمة إلى جانبية عند الاسكرول
-const bottomBar = document.querySelector('.bottom-bar');
-function checkSideMode() {
-  if (window.scrollY > 150) {
-    bottomBar.classList.add('side-mode');
-  } else {
-    bottomBar.classList.remove('side-mode');
-  }
-}
-window.addEventListener('scroll', checkSideMode);
-window.addEventListener('load', checkSideMode);
-
-</script>
-<script>
-
-let scrollTimer;
-const bottomBar = document.querySelector('.bottom-bar');
-
-window.addEventListener('scroll', () => {
-  bottomBar.classList.add('hidden');
-  clearTimeout(scrollTimer);
-
-  scrollTimer = setTimeout(() => {
-    bottomBar.classList.remove('hidden');
-  }, 200);
-});
-
-
-// Highlight section when its inner list can scroll or is scrolled
-function monitorSectionList(sectionId) {
-  const section = document.getElementById(sectionId);
-  if (!section) return;
-  const list = section.querySelector('ul.list');
-  if (!list) return;
-
-  function update() {
-    // if list is scrollable and not at bottom, mark has-more
-    if (list.scrollHeight > list.clientHeight + 5 && (list.scrollTop + list.clientHeight < list.scrollHeight - 5)) {
-      section.classList.add('has-more');
-    } else if (list.scrollHeight > list.clientHeight + 5 && list.scrollTop > 5) {
-      // if scrolled but reached bottom, keep highlight off
-      section.classList.add('has-more');
-    } else {
-      section.classList.remove('has-more');
-    }
-  }
-
-  // initial check
-  update();
-
-  // listeners
-  list.addEventListener('scroll', update);
-  window.addEventListener('resize', update);
-  window.addEventListener('load', update);
-}
-
-// Monitor Hot Drinks specifically
-monitorSectionList('hot-drinks');
 
 </script>
 </body>
