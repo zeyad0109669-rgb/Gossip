@@ -237,19 +237,28 @@ header.hidden {
   
 
 
+
+
+
 .bottom-bar {
   position: sticky;
-  top: 80px;
-  z-index: 150;
-  background: #000; /* خلفية سوداء 100% */
+  top: 0;
+  z-index: 200;
+  background: #000; /* أسود 100% */
   padding: 12px 10px;
-  border-bottom: 2px solid #c8a951; /* خط ذهبي */
-  border-radius: 0;
   display: flex;
   gap: 18px;
   overflow-x: auto;
   white-space: nowrap;
+  border: none;
+  border-bottom: 6px solid transparent; /* خط أوضح */
+  border-image: linear-gradient(to right, #b6932c, #ffd700, #b6932c);
+  border-image-slice: 1;
+  box-shadow: 0 4px 12px rgba(200, 169, 81, 0.7); /* توهج ذهبي قوي */
 }
+
+
+
 
 
 
@@ -414,9 +423,57 @@ ul.list.scrollable::before {
   scroll-margin-top: 60px; /* مسافة بين العنوان وقائمة الاختصارات */
 }
 
+
+/* Emoji Sidebar */
+.emoji-sidebar {
+  position: fixed;
+  right: 20px;
+  top: 150px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  font-size: 22px;
+  z-index: 300;
+  opacity: 0;
+  transform: translateX(60px);
+  transition: all 0.4s ease;
+}
+.emoji-sidebar.visible {
+  opacity: 1;
+  transform: translateX(0);
+}
+.emoji-circle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  background: #000;
+  border: 2px solid #c8a951;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+.emoji-circle:hover,
+.emoji-circle.active {
+  background: #c8a951;
+  color: #000;
+  transform: scale(1.1);
+}
+
 </style>
 </head>
 <body>
+
+<div class="emoji-sidebar">
+  <a href="#hot-drinks"><span class="emoji-circle">🍵</span></a>
+  <a href="#appetizers"><span class="emoji-circle">🍽</span></a>
+  <a href="#pizza"><span class="emoji-circle">🍕</span></a>
+  <a href="#main-course"><span class="emoji-circle">🥩</span></a>
+  <a href="#desserts"><span class="emoji-circle">🍰</span></a>
+  <a href="#beverages"><span class="emoji-circle">🥤</span></a>
+</div>
+
 <div style="text-align:center; padding:10px; margin-top:10px;">
   <h1 style="color:#c8a951; font-size:42px; margin:10px 0;">GOSSIP</h1>
   <p style="color:#bfb8a8; font-size:18px; margin:0; letter-spacing:3px;">
@@ -782,110 +839,35 @@ ul.list.scrollable::before {
   <p>Tel: 03 4238828 · Mob: 01558443147 · Email: gossipcafealex@gmail.com</p>
 </footer>
 
+
 <script>
-  
 
-// hide header on scroll (with hidden class)
-let lastScroll = 0;
-const header = document.querySelector('header');
-window.addEventListener('scroll', () => {
-  const currentScroll = window.pageYOffset;
-  if (currentScroll > lastScroll && currentScroll > 50) {
-    header.classList.add('hidden');
-  } else {
-    header.classList.remove('hidden');
-  }
-  lastScroll = currentScroll;
-});
+// Emoji sidebar show/hide on scroll
+const sidebar = document.querySelector('.emoji-sidebar');
+const sections = document.querySelectorAll('.menu-section');
 
-  
-
-
-// hide header on scroll (with hidden class)
-let lastScroll = 0;
-const header = document.querySelector('header');
-window.addEventListener('scroll', () => {
-  const currentScroll = window.pageYOffset;
-  if (currentScroll > lastScroll && currentScroll > 50) {
-    header.classList.add('hidden');
-  } else {
-    header.classList.remove('hidden');
-  }
-  lastScroll = currentScroll;
-});
-
-  // simple collapse toggle for sections
-  function toggleCollapse(btn){
-    const section = btn.closest('.section');
-    section.classList.toggle('collapsed');
-    const list = section.querySelector('.list');
-    if(section.classList.contains('collapsed')){
-      list.style.maxHeight = '0px';
-      btn.textContent = 'Show';
-    } else {
-      list.style.maxHeight = list.scrollHeight + 'px';
-      btn.textContent = 'Hide';
-    }
-  }
-  // ensure initial heights
-  document.querySelectorAll('.section').forEach(s=>{
-    const list = s.querySelector('.list');
-    list.style.maxHeight = list.scrollHeight + 'px';
-  });
-
-  // small entrance animation stagger
-  window.addEventListener('load', ()=>{
-    document.querySelectorAll('.fade-in').forEach((el,i)=>{
-      el.style.animationDelay = (i*80) + 'ms';
-    });
-  });
-
-// تحديث السهم حسب مكان الاسكرول
-function updateScrollIndicators() {
-  document.querySelectorAll('ul.list').forEach(list => {
-    if (list.scrollHeight > list.clientHeight + 5) {
-      list.classList.add('scrollable');
-      list.addEventListener('scroll', () => {
-        if (list.scrollTop + list.clientHeight >= list.scrollHeight - 5) {
-          list.classList.remove('scrollable'); // يخفي السهم عند الوصول للنهاية
-        } else {
-          list.classList.add('scrollable');
-        }
-      });
-    } else {
-      list.classList.remove('scrollable');
-    }
-  });
-}
-
-window.addEventListener('load', updateScrollIndicators);
-window.addEventListener('resize', updateScrollIndicators);
-window.addEventListener('resize', updateScrollIndicators);
-
-
-// Smooth scroll to center section
-document.querySelectorAll('.bottom-bar a').forEach(link => {
-  link.addEventListener('click', function(e) {
-    e.preventDefault();
-    const targetId = this.getAttribute('href');
-    const target = document.querySelector(targetId);
-    if (target) {
-      const targetRect = target.getBoundingClientRect();
-      const targetY = window.scrollY + targetRect.top - (window.innerHeight / 2) + (targetRect.height / 2);
-      window.scrollTo({ top: targetY, behavior: 'smooth' });
-    }
-  });
-});
-
-
-// Switch bottom-bar to side menu on scroll
-const bottomBar = document.querySelector('.bottom-bar');
 window.addEventListener('scroll', () => {
   if (window.scrollY > 150) {
-    bottomBar.classList.add('side-mode');
+    sidebar.classList.add('visible');
   } else {
-    bottomBar.classList.remove('side-mode');
+    sidebar.classList.remove('visible');
   }
+});
+
+// Highlight active emoji
+window.addEventListener('scroll', () => {
+  sections.forEach(sec => {
+    const rect = sec.getBoundingClientRect();
+    if (rect.top <= 120 && rect.bottom >= 120) {
+      const id = sec.getAttribute('id');
+      document.querySelectorAll('.emoji-circle').forEach(el => {
+        el.classList.remove('active');
+        if (el.parentElement.getAttribute('href') === '#' + id) {
+          el.classList.add('active');
+        }
+      });
+    }
+  });
 });
 
 </script>
