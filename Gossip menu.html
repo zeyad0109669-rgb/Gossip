@@ -1,4 +1,4 @@
-
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="utf-8" />
@@ -240,38 +240,30 @@ header.hidden {
 
 
 
+
 .bottom-bar {
-  position: sticky;
-  top: 0;
-  z-index: 200;
-  background: #000; /* أسود 100% */
+  background: transparent; /* شفاف */
   padding: 12px 10px;
   display: flex;
   gap: 18px;
   overflow-x: auto;
   white-space: nowrap;
   border: none;
-  border-bottom: 6px solid transparent; /* خط أوضح */
-  border-image: linear-gradient(to right, #b6932c, #ffd700, #b6932c);
-  border-image-slice: 1;
-  box-shadow: 0 4px 12px rgba(200, 169, 81, 0.7); /* توهج ذهبي قوي */
+  transition: opacity 0.5s ease;
+}
+.bottom-bar.hidden {
+  opacity: 0; /* تختفي تدريجي */
+  pointer-events: none; /* ما تستقبلش ضغط */
 }
 
 
 
 
+.bottom-bar.hidden {
+  transform: translateY(-120%);
+  opacity: 0;
+}
 
-
-  .bottom-bar a {
-    color: var(--accent);
-    text-decoration: none;
-    font-weight: 600;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    font-size: 14px;
-    transition: color 0.2s ease;
-  }
   .bottom-bar a i {
     font-size: 18px;
   }
@@ -386,22 +378,7 @@ ul.list.scrollable::before {
 }
 
 
-.bottom-bar.side-mode {
-  position: fixed;
-  top: 100px;
-  right: 10px;
-  left: auto;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 10px;
-  background: rgba(0,0,0,0.85);
-  backdrop-filter: blur(4px);
-  padding: 10px;
-  border-radius: 12px;
-  max-height: 80vh;
-  overflow-y: auto;
-  width: 160px;
-}
+
 .bottom-bar.side-mode a {
   display: block;
   width: 100%;
@@ -420,60 +397,59 @@ ul.list.scrollable::before {
 
 
 .menu-section h2 {
-  scroll-margin-top: 60px; /* مسافة بين العنوان وقائمة الاختصارات */
+  scroll-margin-top: 80px; /* مسافة بين العنوان وقائمة الاختصارات */
 }
 
 
-/* Emoji Sidebar */
-.emoji-sidebar {
-  position: fixed;
-  right: 20px;
-  top: 150px;
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-  font-size: 22px;
-  z-index: 300;
-  opacity: 0;
-  transform: translateX(60px);
-  transition: all 0.4s ease;
+html {
+  scroll-behavior: smooth;
 }
-.emoji-sidebar.visible {
-  opacity: 1;
-  transform: translateX(0);
+
+
+/* الوضع الجانبي للاختصارات */
+
+.bottom-bar.side-mode a {
+  display: block;
+  padding: 8px 6px;
+  width: 100%;
 }
-.emoji-circle {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 46px;
-  height: 46px;
-  border-radius: 50%;
+
+
+/* الوضع العادي */
+.bottom-bar {
+  position: sticky;
+  top: 80px;
+  z-index: 150;
   background: #000;
-  border: 2px solid #c8a951;
-  cursor: pointer;
+  padding: 12px 10px;
+  border-bottom: 2px solid #c8a951;
+  display: flex;
+  flex-direction: row; /* أفقي */
+  gap: 18px;
+  overflow-x: auto;
+  white-space: nowrap;
   transition: all 0.3s ease;
 }
-.emoji-circle:hover,
-.emoji-circle.active {
-  background: #c8a951;
-  color: #000;
-  transform: scale(1.1);
+
+/* الوضع الجانبي */
+
+
+/* الانيميشن */
+
+  to { transform: translateX(0); opacity: 1; }
 }
+
+
+/* highlight section when its list has more content or is being scrolled */
+.section.has-more {
+  border: 1px solid #c8a951 !important;
+  box-shadow: 0 10px 30px rgba(200,169,81,0.12);
+}
+.section.has-more h2 { color: #c8a951; }
 
 </style>
 </head>
 <body>
-
-<div class="emoji-sidebar">
-  <a href="#hot-drinks"><span class="emoji-circle">🍵</span></a>
-  <a href="#appetizers"><span class="emoji-circle">🍽</span></a>
-  <a href="#pizza"><span class="emoji-circle">🍕</span></a>
-  <a href="#main-course"><span class="emoji-circle">🥩</span></a>
-  <a href="#desserts"><span class="emoji-circle">🍰</span></a>
-  <a href="#beverages"><span class="emoji-circle">🥤</span></a>
-</div>
-
 <div style="text-align:center; padding:10px; margin-top:10px;">
   <h1 style="color:#c8a951; font-size:42px; margin:10px 0;">GOSSIP</h1>
   <p style="color:#bfb8a8; font-size:18px; margin:0; letter-spacing:3px;">
@@ -839,37 +815,153 @@ ul.list.scrollable::before {
   <p>Tel: 03 4238828 · Mob: 01558443147 · Email: gossipcafealex@gmail.com</p>
 </footer>
 
-
 <script>
+  
 
-// Emoji sidebar show/hide on scroll
-const sidebar = document.querySelector('.emoji-sidebar');
-const sections = document.querySelectorAll('.menu-section');
-
+// hide header on scroll (with hidden class)
+let lastScroll = 0;
+const header = document.querySelector('header');
 window.addEventListener('scroll', () => {
-  if (window.scrollY > 150) {
-    sidebar.classList.add('visible');
+  const currentScroll = window.pageYOffset;
+  if (currentScroll > lastScroll && currentScroll > 50) {
+    header.classList.add('hidden');
   } else {
-    sidebar.classList.remove('visible');
+    header.classList.remove('hidden');
   }
+  lastScroll = currentScroll;
 });
 
-// Highlight active emoji
+  
+
+
+// hide header on scroll (with hidden class)
+let lastScroll = 0;
+const header = document.querySelector('header');
 window.addEventListener('scroll', () => {
-  sections.forEach(sec => {
-    const rect = sec.getBoundingClientRect();
-    if (rect.top <= 120 && rect.bottom >= 120) {
-      const id = sec.getAttribute('id');
-      document.querySelectorAll('.emoji-circle').forEach(el => {
-        el.classList.remove('active');
-        if (el.parentElement.getAttribute('href') === '#' + id) {
-          el.classList.add('active');
+  const currentScroll = window.pageYOffset;
+  if (currentScroll > lastScroll && currentScroll > 50) {
+    header.classList.add('hidden');
+  } else {
+    header.classList.remove('hidden');
+  }
+  lastScroll = currentScroll;
+});
+
+  // simple collapse toggle for sections
+  function toggleCollapse(btn){
+    const section = btn.closest('.section');
+    section.classList.toggle('collapsed');
+    const list = section.querySelector('.list');
+    if(section.classList.contains('collapsed')){
+      list.style.maxHeight = '0px';
+      btn.textContent = 'Show';
+    } else {
+      list.style.maxHeight = list.scrollHeight + 'px';
+      btn.textContent = 'Hide';
+    }
+  }
+  // ensure initial heights
+  document.querySelectorAll('.section').forEach(s=>{
+    const list = s.querySelector('.list');
+    list.style.maxHeight = list.scrollHeight + 'px';
+  });
+
+  // small entrance animation stagger
+  window.addEventListener('load', ()=>{
+    document.querySelectorAll('.fade-in').forEach((el,i)=>{
+      el.style.animationDelay = (i*80) + 'ms';
+    });
+  });
+
+// تحديث السهم حسب مكان الاسكرول
+function updateScrollIndicators() {
+  document.querySelectorAll('ul.list').forEach(list => {
+    if (list.scrollHeight > list.clientHeight + 5) {
+      list.classList.add('scrollable');
+      list.addEventListener('scroll', () => {
+        if (list.scrollTop + list.clientHeight >= list.scrollHeight - 5) {
+          list.classList.remove('scrollable'); // يخفي السهم عند الوصول للنهاية
+        } else {
+          list.classList.add('scrollable');
         }
       });
+    } else {
+      list.classList.remove('scrollable');
+    }
+  });
+}
+
+window.addEventListener('load', updateScrollIndicators);
+window.addEventListener('resize', updateScrollIndicators);
+window.addEventListener('resize', updateScrollIndicators);
+
+
+// Smooth scroll to center section
+document.querySelectorAll('.bottom-bar a').forEach(link => {
+  link.addEventListener('click', function(e) {
+    e.preventDefault();
+    const targetId = this.getAttribute('href');
+    const target = document.querySelector(targetId);
+    if (target) {
+      const targetRect = target.getBoundingClientRect();
+      const targetY = window.scrollY + targetRect.top - (window.innerHeight / 2) + (targetRect.height / 2);
+      window.scrollTo({ top: targetY, behavior: 'smooth' });
     }
   });
 });
 
+
+
+
 </script>
+<script>
+
+
+
+
+// Highlight section when its inner list can scroll or is scrolled
+function monitorSectionList(sectionId) {
+  const section = document.getElementById(sectionId);
+  if (!section) return;
+  const list = section.querySelector('ul.list');
+  if (!list) return;
+
+  function update() {
+    // if list is scrollable and not at bottom, mark has-more
+    if (list.scrollHeight > list.clientHeight + 5 && (list.scrollTop + list.clientHeight < list.scrollHeight - 5)) {
+      section.classList.add('has-more');
+    } else if (list.scrollHeight > list.clientHeight + 5 && list.scrollTop > 5) {
+      // if scrolled but reached bottom, keep highlight off
+      section.classList.add('has-more');
+    } else {
+      section.classList.remove('has-more');
+    }
+  }
+
+  // initial check
+  update();
+
+  // listeners
+  list.addEventListener('scroll', update);
+  window.addEventListener('resize', update);
+  window.addEventListener('load', update);
+}
+
+// Monitor Hot Drinks specifically
+monitorSectionList('hot-drinks');
+
+</script>
+
+<script>
+const bottomBar = document.querySelector('.bottom-bar');
+window.addEventListener('scroll', () => {
+  if (window.scrollY > 100) {
+    bottomBar.classList.add('hidden');
+  } else {
+    bottomBar.classList.remove('hidden');
+  }
+});
+</script>
+
 </body>
 </html>
