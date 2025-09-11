@@ -1,4 +1,4 @@
-
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="utf-8" />
@@ -58,7 +58,7 @@ header.hidden {
   }
   h1{ margin:0; font-size:36px; letter-spacing:2px; color:var(--accent); }
   p.lead{ margin:6px 0 0; color:var(--muted); font-size:14px; letter-spacing:3px; }
-  main{ max-width:1100px; margin:30px auto; padding:160px 18px 60px; }
+  main{ max-width:1100px; margin:30px auto; padding:100px 18px 60px; }
   .grid{
     display:grid;
     grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
@@ -234,26 +234,29 @@ header.hidden {
 
   
   
-  .bottom-bar {
-    margin: 20px 0;
-    padding: 12px 20px;
-    background: rgba(0,0,0,0.4);
-    border: 1px solid rgba(255,255,255,0.08);
-    border-radius: 12px;
-    display: flex;
-    justify-content: center;
-    gap: 24px;
-  }
-  .bottom-bar a {
-    color: var(--accent);
-    text-decoration: none;
-    font-weight: 600;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    font-size: 14px;
-    transition: color 0.2s ease;
-  }
+  
+
+
+
+.bottom-bar {
+  position: sticky;
+  top: 80px;
+  z-index: 150;
+  background: #000;
+  padding: 12px 10px;
+  border-bottom: 2px solid #c8a951;
+  display: flex;
+  gap: 18px;
+  overflow-x: auto;
+  white-space: nowrap;
+  transition: transform 0.4s ease, opacity 0.4s ease;
+}
+
+.bottom-bar.hidden {
+  transform: translateY(-120%);
+  opacity: 0;
+}
+
   .bottom-bar a i {
     font-size: 18px;
   }
@@ -325,19 +328,182 @@ header.hidden {
   /* collapse */
   .collapsed ul.list{ max-height:0; padding:0; margin:0; overflow:hidden; transition: max-height .35s ease; }
   .section .hint{ font-size:12px; color:var(--muted); margin-left:8px; }
+
+ul.list {
+  position: relative;
+  overflow-y: auto;
+}
+
+/* التدرج */
+ul.list::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 40px;
+  background: linear-gradient(to bottom, rgba(15,15,17,0) 0%, rgba(15,15,17,0.95) 100%);
+  pointer-events: none;
+}
+
+
+  50% { transform: translate(-50%, 4px); }
+}
+
+
+/* السهم */
+ul.list.scrollable::before {
+  content: "▼";
+  font-size: 16px;
+  color: var(--accent); /* بدل muted */
+  position: absolute;
+  bottom: 14px; /* رفعناه فوق التدرج */
+  left: 50%;
+  transform: translateX(-50%);
+  animation: bounce 1.2s infinite;
+  pointer-events: none;
+  z-index: 10;
+}
+
+@keyframes bounce {
+  0%, 100% { transform: translate(-50%, 0); }
+  50% { transform: translate(-50%, 4px); }
+}
+
+
+.bottom-bar.side-mode {
+  position: fixed;
+  top: 100px;
+  right: 10px;
+  left: auto;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+  background: rgba(0,0,0,0.85);
+  backdrop-filter: blur(4px);
+  padding: 10px;
+  border-radius: 12px;
+  max-height: 80vh;
+  overflow-y: auto;
+  width: 160px;
+}
+.bottom-bar.side-mode a {
+  display: block;
+  width: 100%;
+  font-size: 14px;
+}
+
+
+.menu-section h2 {
+  font-size: 28px;
+  margin-bottom: 20px;
+}
+.menu-section ul.list li {
+  font-size: 18px;
+  padding: 10px 0;
+}
+
+
+.menu-section h2 {
+  scroll-margin-top: 80px; /* مسافة بين العنوان وقائمة الاختصارات */
+}
+
+
+html {
+  scroll-behavior: smooth;
+}
+
+
+/* الوضع الجانبي للاختصارات */
+.bottom-bar.side-mode {
+  position: fixed !important;
+  top: 120px;
+  right: 20px;
+  left: auto;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 200px;
+  max-height: 80vh;
+  overflow-y: auto;
+  padding: 16px;
+  border: 1px solid #c8a951;
+  border-radius: 12px;
+  box-shadow: 0 6px 16px rgba(0,0,0,0.5);
+}
+.bottom-bar.side-mode a {
+  display: block;
+  padding: 8px 6px;
+  width: 100%;
+}
+
+
+/* الوضع العادي */
+.bottom-bar {
+  position: sticky;
+  top: 80px;
+  z-index: 150;
+  background: #000;
+  padding: 12px 10px;
+  border-bottom: 2px solid #c8a951;
+  display: flex;
+  flex-direction: row; /* أفقي */
+  gap: 18px;
+  overflow-x: auto;
+  white-space: nowrap;
+  transition: all 0.3s ease;
+}
+
+/* الوضع الجانبي */
+.bottom-bar.side-mode {
+  position: fixed !important;
+  top: 120px;
+  right: 0;
+  left: auto;
+  flex-direction: column; /* عمودي */
+  align-items: flex-start;
+  width: 200px;
+  max-height: 80vh;
+  overflow-y: auto;
+  padding: 16px;
+  border: 1px solid #c8a951;
+  border-radius: 12px 0 0 12px;
+  box-shadow: -4px 0 10px rgba(0,0,0,0.6);
+  animation: slideIn 0.4s forwards;
+}
+
+/* الانيميشن */
+@keyframes slideIn {
+  from { transform: translateX(100%); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+
+
+/* highlight section when its list has more content or is being scrolled */
+.section.has-more {
+  border: 1px solid #c8a951 !important;
+  box-shadow: 0 10px 30px rgba(200,169,81,0.12);
+}
+.section.has-more h2 { color: #c8a951; }
+
 </style>
 </head>
 <body>
-
-
-
-
-
-
-<div style="text-align:center; padding:0; margin-top:20px;">
-  <h1 style="color:#c8a951; font-size:48px; margin:20px 0 5px; text-align:center;">GOSSIP</h1>
-  <p style="color:#bfb8a8; font-size:16px; margin:0; letter-spacing:3px;">LIVE · LAUGH · GOSSIP</p>
+<div style="text-align:center; padding:10px; margin-top:10px;">
+  <h1 style="color:#c8a951; font-size:42px; margin:10px 0;">GOSSIP</h1>
+  <p style="color:#bfb8a8; font-size:18px; margin:0; letter-spacing:3px;">
+    LIVE · LAUGH · GOSSIP
+  </p>
+  <p style="color:#c8a951; font-size:20px; margin-top:8px; font-weight:600; letter-spacing:2px;">
+    RESTAURANT MENU
+  </p>
 </div>
+
+
+
+
+
+
+
 
 
 
@@ -480,11 +646,11 @@ header.hidden {
       <section class="section fade-in" id="soft-drinks">
         <h2>Soft Drinks <button class="toggle" onclick="toggleCollapse(this)">Toggle</button></h2>
         <ul class="list">
-          <li class="item"><div class="name">Water Small</div><div class="price">-25</div></li>
-          <li class="item"><div class="name">Water Large</div><div class="price">50</div></li>
-          <li class="item"><div class="name">Cola / Sprite / Fanta</div><div class="price">55</div></li>
-          <li class="item"><div class="name">Fayrouz / Birell / Schweppes</div><div class="price">65</div></li>
-          <li class="item"><div class="name">Red Bull</div><div class="price">130</div></li>
+          <li class="item"><div class="name">Water Small</div><div class="price">-</div></li>
+          <li class="item"><div class="name">Water Large</div><div class="price">-</div></li>
+          <li class="item"><div class="name">Cola / Sprite / Fanta</div><div class="price">-</div></li>
+          <li class="item"><div class="name">Fayrouz / Birell / Schweppes</div><div class="price">-</div></li>
+          <li class="item"><div class="name">Red Bull</div><div class="price">-</div></li>
         </ul>
       </section>
 
@@ -506,8 +672,8 @@ header.hidden {
           <li class="item"><div class="name">Chicken Wings (6 Pieces)</div><div class="price">135</div></li>
           <li class="item"><div class="name">Fried Shrimps</div><div class="price">190</div></li>
           <li class="item"><div class="name">Shrimp Cocktail</div><div class="price">200</div></li>
-          <li class="item"><div class="name">Calamari</div><div class="price">170</div></li>
-          <li class="item"><div class="name">Oriental Sausages</div><div class="price">150</div></li>
+          <li class="item"><div class="name">Calamari</div><div class="price">-</div></li>
+          <li class="item"><div class="name">Oriental Sausages</div><div class="price">-</div></li>
           <li class="item"><div class="name">White Cheese & Tomatoes</div><div class="price">80</div></li>
           <li class="item"><div class="name">Carrots & Cucumber Slices</div><div class="price">50</div></li>
           <li class="item"><div class="name">Tehina</div><div class="price">60</div></li>
@@ -552,7 +718,7 @@ header.hidden {
           <li class="item"><div class="name">Grilled Chicken with Mushroom Sauce</div><div class="price">350</div></li>
           <li class="item"><div class="name">Chicken Cordon Bleu</div><div class="price">310</div></li>
           <li class="item"><div class="name">Chicken Cacciatore</div><div class="price">360</div></li>
-          <li class="item"><div class="name">Chicken Gossip</div><div class="price">360</div></li>
+          <li class="item"><div class="name">Chicken Gossip</div><div class="price">-</div></li>
         </ul>
       </section>
     </div> <!-- grid fourth row -->
@@ -744,16 +910,117 @@ window.addEventListener('scroll', () => {
       el.style.animationDelay = (i*80) + 'ms';
     });
   });
+
+// تحديث السهم حسب مكان الاسكرول
+function updateScrollIndicators() {
+  document.querySelectorAll('ul.list').forEach(list => {
+    if (list.scrollHeight > list.clientHeight + 5) {
+      list.classList.add('scrollable');
+      list.addEventListener('scroll', () => {
+        if (list.scrollTop + list.clientHeight >= list.scrollHeight - 5) {
+          list.classList.remove('scrollable'); // يخفي السهم عند الوصول للنهاية
+        } else {
+          list.classList.add('scrollable');
+        }
+      });
+    } else {
+      list.classList.remove('scrollable');
+    }
+  });
+}
+
+window.addEventListener('load', updateScrollIndicators);
+window.addEventListener('resize', updateScrollIndicators);
+window.addEventListener('resize', updateScrollIndicators);
+
+
+// Smooth scroll to center section
+document.querySelectorAll('.bottom-bar a').forEach(link => {
+  link.addEventListener('click', function(e) {
+    e.preventDefault();
+    const targetId = this.getAttribute('href');
+    const target = document.querySelector(targetId);
+    if (target) {
+      const targetRect = target.getBoundingClientRect();
+      const targetY = window.scrollY + targetRect.top - (window.innerHeight / 2) + (targetRect.height / 2);
+      window.scrollTo({ top: targetY, behavior: 'smooth' });
+    }
+  });
+});
+
+
+// Switch bottom-bar to side menu on scroll
+const bottomBar = document.querySelector('.bottom-bar');
+window.addEventListener('scroll', () => {
+  if (window.scrollY > 150) {
+    bottomBar.classList.add('side-mode');
+  } else {
+    bottomBar.classList.remove('side-mode');
+  }
+});
+
 </script>
+<script>
+
+// تحويل القائمة إلى جانبية عند الاسكرول
+const bottomBar = document.querySelector('.bottom-bar');
+function checkSideMode() {
+  if (window.scrollY > 150) {
+    bottomBar.classList.add('side-mode');
+  } else {
+    bottomBar.classList.remove('side-mode');
+  }
+}
+window.addEventListener('scroll', checkSideMode);
+window.addEventListener('load', checkSideMode);
+
+</script>
+<script>
+
+let scrollTimer;
+const bottomBar = document.querySelector('.bottom-bar');
+
+window.addEventListener('scroll', () => {
+  bottomBar.classList.add('hidden');
+  clearTimeout(scrollTimer);
+
+  scrollTimer = setTimeout(() => {
+    bottomBar.classList.remove('hidden');
+  }, 200);
+});
 
 
+// Highlight section when its inner list can scroll or is scrolled
+function monitorSectionList(sectionId) {
+  const section = document.getElementById(sectionId);
+  if (!section) return;
+  const list = section.querySelector('ul.list');
+  if (!list) return;
 
+  function update() {
+    // if list is scrollable and not at bottom, mark has-more
+    if (list.scrollHeight > list.clientHeight + 5 && (list.scrollTop + list.clientHeight < list.scrollHeight - 5)) {
+      section.classList.add('has-more');
+    } else if (list.scrollHeight > list.clientHeight + 5 && list.scrollTop > 5) {
+      // if scrolled but reached bottom, keep highlight off
+      section.classList.add('has-more');
+    } else {
+      section.classList.remove('has-more');
+    }
+  }
 
+  // initial check
+  update();
 
+  // listeners
+  list.addEventListener('scroll', update);
+  window.addEventListener('resize', update);
+  window.addEventListener('load', update);
+}
 
+// Monitor Hot Drinks specifically
+monitorSectionList('hot-drinks');
 
-
-
-
+</script>
 </body>
 </html>
